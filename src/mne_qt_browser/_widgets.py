@@ -644,6 +644,9 @@ class RawViewBox(ViewBox):
         # If we want the context menu back, uncomment the following line
         # super().mouseClickEvent(event)
         if not self.mne.annotation_mode:
+            # Optionally disable placing/removing the vertical guide
+            if not getattr(self.mne, "allow_vline", True):
+                return
             if event.button() == Qt.LeftButton:
                 self.weakmain()._add_vline(self.mapSceneToView(event.scenePos()).x())
             elif event.button() == Qt.RightButton:

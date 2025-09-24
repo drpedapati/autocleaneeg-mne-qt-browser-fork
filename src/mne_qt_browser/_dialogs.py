@@ -645,10 +645,14 @@ class HelpDialog(_BaseDialog):
             (f"Left-click {ch_cmp} name", lclick_name),
             (f"Left-click {ch_cmp} data", lclick_data),
             ("Left-click-and-drag on plot", ldrag),
-            ("Left-click on plot background", "Place vertical guide"),
-            ("Right-click on plot background", "Clear vertical guide"),
-            ("Right-click on channel name", rclick_name),
         ]
+        # Optionally include vertical guide interactions
+        if getattr(self.mne, "allow_vline", True):
+            mouse_help += [
+                ("Left-click on plot background", "Place vertical guide"),
+                ("Right-click on plot background", "Clear vertical guide"),
+            ]
+        mouse_help += [("Right-click on channel name", rclick_name)]
 
         mouse_label = QLabel("Mouse Interaction")
         mouse_label.setFont(_q_font(16, bold=True))

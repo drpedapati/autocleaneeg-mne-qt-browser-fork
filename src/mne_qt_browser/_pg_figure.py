@@ -230,6 +230,9 @@ class MNEQtBrowser(BrowserBase, QMainWindow, metaclass=_PGMetaClass):
         self.backend_name = "pyqtgraph"
         self._closed = False
 
+        # Extract backend-specific kwargs before delegating to BrowserBase
+        allow_vline = kwargs.pop("allow_vline", False)
+
         BrowserBase.__init__(self, **kwargs)
         QMainWindow.__init__(self)
 
@@ -285,6 +288,8 @@ class MNEQtBrowser(BrowserBase, QMainWindow, metaclass=_PGMetaClass):
         self.mne.data_precomputed = False
         self._rerun_load_thread = False
         self.mne.zscore_rgba = None
+        # Whether placing/removing a vertical guide (time label) is allowed
+        self.mne.allow_vline = allow_vline
         # Container for traces
         self.mne.traces = list()
         # Scale factor
