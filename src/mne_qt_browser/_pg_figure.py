@@ -502,8 +502,10 @@ class MNEQtBrowser(BrowserBase, QMainWindow, metaclass=_PGMetaClass):
         self.mne.view = BrowserView(
             self.mne.plt, useOpenGL=self.mne.use_opengl, background="w"
         )
+        # Use the explicit background color without theme inversion so it remains
+        # stable regardless of theme changes in host applications.
         bgcolor = getattr(self.mne, "bgcolor", "w")
-        self.mne.view.setBackground(_get_color(bgcolor, self.mne.dark))
+        self.mne.view.setBackground(_get_color(bgcolor, False))
         layout.addWidget(self.mne.view, 0, 0)
 
         # Initialize scrollbars

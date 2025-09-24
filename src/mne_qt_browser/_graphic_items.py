@@ -600,36 +600,11 @@ class DataTrace(PlotCurveItem):
         """Toggle bad status."""
         # Toggle bad epoch
         if self.mne.is_epochs and x is not None:
-            epoch_idx, color = self.weakmain()._toggle_bad_epoch(x)
-
-            # Update epoch color
-            if color != "none":
-                new_epo_color = np.repeat(
-                    to_rgba_array(color), len(self.mne.inst.ch_names), axis=0
-                )
-            elif self.mne.epoch_colors is None:
-                new_epo_color = np.concatenate(
-                    [to_rgba_array(c) for c in self.mne.ch_color_ref.values()]
-                )
-            else:
-                new_epo_color = np.concatenate(
-                    [to_rgba_array(c) for c in self.mne.epoch_colors[epoch_idx]]
-                )
-
-            # Update bad channel colors
-            bad_idxs = np.isin(self.mne.ch_names, self.mne.info["bads"])
-            new_epo_color[bad_idxs] = to_rgba_array(self.mne.ch_color_bad)
-
-            self.mne.epoch_color_ref[:, epoch_idx] = new_epo_color
-
-            # Update overview bar
+            # Toggle state in the underlying object but keep time series colors stable
+            # by not modifying epoch_color_ref. Only update overview bar indicators.
+            self.weakmain()._toggle_bad_epoch(x)
             self.mne.overview_bar.update_bad_epochs()
-
-            # Update other traces inlcuding self
-            for trace in self.mne.traces:
-                trace.update_color()
-                # Update data is necessary because colored segments will vary
-                trace.update_data()
+            return
 
         # Toggle bad channel
         else:
