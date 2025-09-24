@@ -3,7 +3,7 @@ requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
-name = "mne-qt-browser"
+name = "autocleaneeg-mne-qt-browser-fork"
 description = "PyQtGraph-based backend for MNE-Python's raw data browser"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -27,7 +27,7 @@ dependencies = [
   "darkdetect",
   "qdarkstyle",
 ]
-dynamic = ["version"]
+version = "0.8.0"
 
 [project.optional-dependencies]
 opengl = ["pyopengl"]
@@ -43,9 +43,9 @@ tests = [
 ]
 
 [project.urls]
-homepage = "https://mne.tools/"
-repository = "https://github.com/mne-tools/mne-qt-browser"
-changelog = "https://github.com/mne-tools/mne-qt-browser/releases"
+homepage = "https://github.com/drpedapati/autocleaneeg-mne-qt-browser-fork"
+repository = "https://github.com/drpedapati/autocleaneeg-mne-qt-browser-fork"
+changelog = "https://github.com/drpedapati/autocleaneeg-mne-qt-browser-fork/releases"
 
 [tool.hatch.build]
 exclude = [
@@ -56,9 +56,10 @@ exclude = [
   "/tests",
 ] # tracked by git, but we don't want to ship those files
 
-[tool.hatch.version]
-source = "vcs"
-raw-options = { version_scheme = "release-branch-semver" }
+[tool.hatch.build.targets.wheel]
+packages = ["src/mne_qt_browser"]
+
+# Note: version is explicitly set in [project.version] for PyPI compliance.
 
 [tool.pytest.ini_options]
 addopts = "-ra --cov-report= --tb=short --junit-xml=junit-results.xml --capture=sys --durations=10"

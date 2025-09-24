@@ -2,9 +2,19 @@
 # Copyright the MNE Qt Browser contributors.
 
 try:
-    from importlib.metadata import version
+    from importlib.metadata import version, PackageNotFoundError
 
-    __version__ = version("mne_qt_browser")
+    __version__ = "0.0.0"
+    # Try our forked distribution name first, then fall back to upstream name
+    for _dist in (
+        "autocleaneeg-mne-qt-browser-fork",
+        "mne-qt-browser",
+    ):
+        try:
+            __version__ = version(_dist)
+            break
+        except PackageNotFoundError:
+            continue
 except Exception:
     __version__ = "0.0.0"
 
