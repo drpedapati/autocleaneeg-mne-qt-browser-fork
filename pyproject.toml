@@ -27,7 +27,7 @@ dependencies = [
   "darkdetect",
   "qdarkstyle",
 ]
-version = "0.8.0"
+version = "0.8.1"
 
 [project.optional-dependencies]
 opengl = ["pyopengl"]
