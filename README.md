@@ -4,6 +4,10 @@
 
 MNE Qt Browser is an alternative backend for plotting multichannel time series data (such as EEG or MEG) with [MNE-Python](https://github.com/mne-tools/mne-python). The backend is based on [PyQtGraph](https://github.com/pyqtgraph/pyqtgraph), which in turn uses [Qt](https://www.qt.io/product/framework) under the hood.
 
+## About this fork
+
+This repository is a customized fork maintained by the [Cincinnati Brain Lab](https://github.com/cincibrainlab) to integrate seamlessly with the [AutoCleanEEG Pipeline](https://github.com/cincibrainlab/autocleaneeg_pipeline). The fork tracks upstream `mne-qt-browser` while applying compatibility tweaks and packaging adjustments needed for deployment within the AutoCleanEEG ecosystem. Users looking for the canonical project should visit the [mne-tools/mne-qt-browser](https://github.com/mne-tools/mne-qt-browser) repository.
+
 
 ## Installation
 
