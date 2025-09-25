@@ -8,6 +8,13 @@ MNE Qt Browser is an alternative backend for plotting multichannel time series d
 
 This repository is a customized fork maintained by the [Cincinnati Brain Lab](https://github.com/cincibrainlab) to integrate seamlessly with the [AutoCleanEEG Pipeline](https://github.com/cincibrainlab/autocleaneeg_pipeline). The fork tracks upstream `mne-qt-browser` while applying compatibility tweaks and packaging adjustments needed for deployment within the AutoCleanEEG ecosystem. Users looking for the canonical project should visit the [mne-tools/mne-qt-browser](https://github.com/mne-tools/mne-qt-browser) repository.
 
+### Fork-specific changes
+
+- Packaging and distribution adjustments ([a4828f6](https://github.com/drpedapati/autocleaneeg-mne-qt-browser-fork/commit/a4828f6c386fb5c9b61da2799916a83dc871a9d5)): renamed the published distribution to `autocleaneeg-mne-qt-browser-fork`, updated project URLs, and added runtime version fallback so the browser still reports a version when imported from either the fork or the upstream package.
+- Bad epoch interaction refinements ([dbb0897](https://github.com/drpedapati/autocleaneeg-mne-qt-browser-fork/commit/dbb089754c91909b5ee668d1dd3d5378bd2fc4b9)): stabilized DataTrace colors when epochs are marked bad, limited overview-bar refreshes to the affected regions, tuned background handling to respect dark/light themes, and documented the modified click behaviour for future maintenance.
+- Vertical guide controls ([c8102a4](https://github.com/drpedapati/autocleaneeg-mne-qt-browser-fork/commit/c8102a4bca37bb9070902a194a2644a1e8f53979)): introduced an `allow_vline` flag that lets the AutoCleanEEG workflow enable or disable on-plot vertical guides, with matching updates to the help dialog and RawViewBox event handling.
+- Release maintenance ([e0c5c2b](https://github.com/drpedapati/autocleaneeg-mne-qt-browser-fork/commit/e0c5c2ba62d74f4958a4067a8dc51d351e5f8bc3), [0c61a03](https://github.com/drpedapati/autocleaneeg-mne-qt-browser-fork/commit/0c61a0378fbc5aeb0ce19316d766f4eaa02b597c)): tracks AutoCleanEEG-compatible release numbering and documents the fork context directly in this README.
+
 
 ## Installation
 
