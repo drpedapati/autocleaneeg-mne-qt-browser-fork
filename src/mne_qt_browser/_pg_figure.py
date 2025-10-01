@@ -35,8 +35,10 @@ from mne.viz.backends._utils import _init_mne_qtapp, _qt_raise_window
 from mne.viz.utils import _merge_annotations, _simplify_float
 from pyqtgraph import (
     InfiniteLine,
+    LinearRegionItem,
     PlotItem,
     Point,
+    mkBrush,
     mkPen,
     setConfigOption,
 )
@@ -47,7 +49,7 @@ from qtpy.QtCore import (
     QThread,
     Signal,
 )
-from qtpy.QtGui import QIcon, QMouseEvent
+from qtpy.QtGui import QColor, QIcon, QMouseEvent
 from qtpy.QtTest import QTest
 from qtpy.QtWidgets import (
     QAction,
@@ -283,6 +285,8 @@ class MNEQtBrowser(BrowserBase, QMainWindow, metaclass=_PGMetaClass):
         self.mne.decim_data = None
         # Stores ypos for selection mode
         self.mne.selection_ypos_dict = dict()
+        # Bad epoch highlight tracking (light blue backgrounds in main plot)
+        self.mne.bad_epoch_highlight_dict = dict()
         # Parameters for precomputing
         self.mne.enable_precompute = False
         self.mne.data_precomputed = False
@@ -952,6 +956,47 @@ class MNEQtBrowser(BrowserBase, QMainWindow, metaclass=_PGMetaClass):
     def _update_ch_spinbox_values(self):
         if self.mne.fig_settings is not None:
             self.mne.fig_settings._update_spinbox_values(ch_type="all", source="all")
+
+    def update_bad_epoch_highlights(self):
+        """Update light blue background highlights for all bad epochs in main plot."""
+        if not self.mne.is_epochs:
+            return
+
+        bad_set = set(self.mne.bad_epochs)
+        highlight_set = set(self.mne.bad_epoch_highlight_dict.keys())
+
+        add_epos = bad_set.difference(highlight_set)
+        rm_epos = highlight_set.difference(bad_set)
+
+        # Add highlights for newly marked bad epochs
+        for epo_num in self.mne.inst.selection:
+            if epo_num in add_epos:
+                epo_idx = self.mne.inst.selection.tolist().index(epo_num)
+                start_time = self.mne.boundary_times[epo_idx]
+                stop_time = self.mne.boundary_times[epo_idx + 1]
+
+                # Create light blue background highlight
+                highlight = LinearRegionItem(
+                    values=(start_time, stop_time),
+                    orientation="vertical",
+                    movable=False,
+                    brush=mkBrush(QColor(173, 216, 230, 60)),  # Light blue with alpha
+                )
+                highlight.setZValue(-1)  # Place behind traces
+                highlight.lines[0].setPen(None)  # Hide boundary lines
+                highlight.lines[1].setPen(None)
+
+                self.mne.plt.addItem(highlight, ignoreBounds=True)
+                self.mne.bad_epoch_highlight_dict[epo_num] = highlight
+
+        # Remove highlights for epochs no longer marked as bad
+        for epo_num in rm_epos:
+            highlight = self.mne.bad_epoch_highlight_dict[epo_num]
+            try:
+                self.mne.plt.removeItem(highlight)
+            except (AttributeError, RuntimeError):
+                pass
+            self.mne.bad_epoch_highlight_dict.pop(epo_num)
 
     def _set_scalebars_visible(self, visible):
         for scalebar in self.mne.scalebars.values():

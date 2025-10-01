@@ -604,6 +604,8 @@ class DataTrace(PlotCurveItem):
             # by not modifying epoch_color_ref. Only update overview bar indicators.
             self.weakmain()._toggle_bad_epoch(x)
             self.mne.overview_bar.update_bad_epochs()
+            # Update light blue background highlights in main plot
+            self.weakmain().update_bad_epoch_highlights()
             return
 
         # Toggle bad channel
